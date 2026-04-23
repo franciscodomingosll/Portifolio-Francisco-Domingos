@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francisco Domingos — Engenheiro de Software Full-Stack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── RESET & BASE ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --brand: #2563eb;
+            --brand-dark: #1d4ed8;
+            --accent: #06b6d4;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --surface: #f1f5f9;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --radius: 14px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.07);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --surface: #1e293b;
+            --border: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-light: #64748b;
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.5);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── HEADER ── */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            transition: all var(--transition);
+        }
+        body.dark .header { background: rgba(15,23,42,0.9); }
+        .header.scrolled { border-color: var(--border); box-shadow: var(--shadow); }
+
+        .header-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            height: 68px;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem; font-weight: 700;
+            color: var(--text); text-decoration: none;
+        }
+        .logo span { color: var(--brand); }
+
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a {
+            padding: 6px 14px; border-radius: 8px;
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.9rem; font-weight: 500;
+            transition: all var(--transition);
+        }
+        .nav-links a:hover, .nav-links a.ativo {
+            background: var(--surface); color: var(--text);
+        }
+
+        .dark-toggle {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 6px 10px; cursor: pointer;
+            font-size: 1rem; transition: all var(--transition);
+        }
+        .dark-toggle:hover { background: var(--border); }
+
+        .menu-hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer; padding: 4px;
+        }
+        .menu-hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: var(--text); border-radius: 2px;
+            transition: all var(--transition);
+        }
+        .menu-hamburger.ativo span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .menu-hamburger.ativo span:nth-child(2) { opacity: 0; }
+        .menu-hamburger.ativo span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 100px 0 80px;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.06) 0%, transparent 70%);
+        }
+
+        .hero-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            align-items: center; gap: 60px;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(37,99,235,0.08); color: var(--brand);
+            border: 1px solid rgba(37,99,235,0.2);
+            padding: 6px 14px; border-radius: 50px;
+            font-size: 0.82rem; font-weight: 600; margin-bottom: 24px;
+        }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800; line-height: 1.15; margin-bottom: 20px;
+        }
+        .accent { color: var(--brand); }
+
+        .hero-subtitle {
+            font-size: 1.05rem; color: var(--text-muted);
+            max-width: 480px; margin-bottom: 36px;
+        }
+
+        .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+
+        .btn {
+            padding: 12px 26px; border-radius: 10px;
+            font-size: 0.95rem; font-weight: 600;
+            text-decoration: none; cursor: pointer;
+            transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary {
+            background: var(--brand); color: white;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+        }
+        .btn-primary:hover { background: var(--brand-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.4); }
+        .btn-outline {
+            border: 1.5px solid var(--border); color: var(--text);
+            background: transparent;
+        }
+        .btn-outline:hover { background: var(--surface); transform: translateY(-2px); }
+
+        .hero-stats {
+            display: flex; gap: 36px;
+            padding-top: 32px; border-top: 1px solid var(--border);
+        }
+        .hero-stat-number { font-size: 1.8rem; font-weight: 800; color: var(--brand); }
+        .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); }
+
+        .hero-image-wrapper { display: flex; justify-content: center; }
+        .hero-image-ring {
+            width: 340px; height: 340px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand), var(--accent));
+            padding: 4px;
+            box-shadow: 0 20px 60px rgba(37,99,235,0.25);
+        }
+        .hero-image {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: var(--surface);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 6rem; overflow: hidden;
+        }
+        .hero-image img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+        }
+        .hero-image-placeholder {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 8px; color: var(--text-muted); font-size: 0.85rem; text-align: center;
+        }
+        .hero-image-placeholder span { font-size: 3.5rem; }
+
+        /* ── SECTION BASE ── */
+        .section { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-label {
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em;
+            text-transform: uppercase; color: var(--brand); margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            font-weight: 800; margin-bottom: 16px;
+        }
+        .section-desc { font-size: 1rem; color: var(--text-muted); max-width: 520px; margin: 0 auto; }
+
+        /* ── SOBRE ── */
+        .sobre { background: var(--bg-alt); }
+        .sobre-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: center; }
+
+        .sobre-image-card {
+            position: relative; border-radius: var(--radius);
+            background: var(--surface); border: 1px solid var(--border);
+            overflow: hidden; aspect-ratio: 3/4;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 12px;
+        }
+        .sobre-image-card img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius);
+        }
+        .sobre-image-placeholder {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 10px; color: var(--text-muted); text-align: center; padding: 24px;
+        }
+        .sobre-image-placeholder span { font-size: 4rem; }
+        .sobre-image-placeholder p { font-size: 0.85rem; line-height: 1.5; }
+
+        .sobre-experience-badge {
+            position: absolute; bottom: 20px; right: -10px;
+            background: var(--brand); color: white;
+            padding: 14px 18px; border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        .sobre-experience-badge strong { display: block; font-size: 1.3rem; font-weight: 800; }
+        .sobre-experience-badge span { font-size: 0.78rem; opacity: 0.85; }
+
+        .sobre-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand); margin-bottom: 12px; }
+        .sobre-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; line-height: 1.25; }
+        .sobre-text { color: var(--text-muted); margin-bottom: 16px; font-size: 0.97rem; }
+
+        .sobre-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
+        .sobre-info-item {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px;
+        }
+        .sobre-info-item .icon { font-size: 1.3rem; }
+        .sobre-info-item .label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+        .sobre-info-item .value { font-size: 0.9rem; font-weight: 600; }
+
+        /* ── SKILLS ── */
+        .competencias { background: var(--bg); }
+        .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+        .skill-card {
+            background: var(--bg-alt); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 24px;
+            transition: all var(--transition);
+        }
+        .skill-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--brand); }
+        .skill-icon { font-size: 2rem; margin-bottom: 12px; }
+        .skill-name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .skill-level { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; }
+        .skill-bar { background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; }
+        .skill-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--brand), var(--accent));
+            border-radius: 4px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        /* ── PORTFÓLIO ── */
+        .portfolio { background: var(--bg-alt); }
+        .filtros { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+        .filtro-btn {
+            padding: 8px 20px; border-radius: 50px;
+            border: 1.5px solid var(--border); background: var(--bg);
+            color: var(--text-muted); font-size: 0.87rem; font-weight: 600;
+            cursor: pointer; transition: all var(--transition);
+        }
+        .filtro-btn:hover, .filtro-btn.ativo {
+            background: var(--brand); color: white; border-color: var(--brand);
+        }
+
+        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .portfolio-card {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden;
+            transition: all var(--transition);
+        }
+        .portfolio-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .portfolio-card.hidden { display: none; }
+
+        .portfolio-thumb { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+        .portfolio-thumb-bg {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem;
+        }
+        .portfolio-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            opacity: 0; transition: opacity var(--transition);
+        }
+        .portfolio-card:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-overlay-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: white; border: none; cursor: pointer;
+            font-size: 1.1rem; transition: transform var(--transition);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .portfolio-overlay-btn:hover { transform: scale(1.1); }
+
+        .portfolio-info { padding: 20px; }
+        .portfolio-category { font-size: 0.75rem; color: var(--brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .portfolio-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .portfolio-desc { font-size: 0.87rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+        .portfolio-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .portfolio-tag {
+            font-size: 0.75rem; padding: 3px 10px; border-radius: 50px;
+            background: var(--surface); color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+        .portfolio-link {
+            display: inline-block; margin-top: 10px;
+            font-size: 0.8rem; color: var(--brand); font-weight: 600;
+            text-decoration: none; transition: opacity var(--transition);
+        }
+        .portfolio-link:hover { opacity: 0.75; }
+
+        /* ── CONTACTO ── */
+        .contacto { background: var(--bg); }
+        .contacto-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px; }
+
+        .contacto-info-card {
+            background: var(--brand); color: white;
+            border-radius: var(--radius); padding: 40px;
+        }
+        .contacto-info-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+        .contacto-info-text { font-size: 0.9rem; opacity: 0.85; margin-bottom: 32px; line-height: 1.6; }
+        .contacto-item { display: flex; gap: 14px; margin-bottom: 22px; }
+        .contacto-item-icon { font-size: 1.2rem; margin-top: 2px; }
+        .contacto-item-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.06em; }
+        .contacto-item-value { font-size: 0.9rem; font-weight: 600; word-break: break-all; }
+
+        .contacto-socials { display: flex; gap: 10px; margin-top: 32px; }
+        .social-link {
+            width: 40px; height: 40px; border-radius: 8px;
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.1rem;
+            transition: background var(--transition);
+        }
+        .social-link:hover { background: rgba(255,255,255,0.25); }
+
+        .contacto-form { display: flex; flex-direction: column; gap: 18px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.85rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 12px 14px; border-radius: 10px;
+            border: 1.5px solid var(--border); background: var(--bg-alt);
+            color: var(--text); font-family: inherit; font-size: 0.9rem;
+            transition: border-color var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none; border-color: var(--brand);
+        }
+        .form-group input.erro, .form-group textarea.erro { border-color: #ef4444; }
+        .form-error-msg { font-size: 0.78rem; color: #ef4444; display: none; }
+        .form-error-msg.visivel { display: block; }
+
+        .btn-submit {
+            padding: 14px 28px; background: var(--brand); color: white;
+            border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: all var(--transition);
+            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+        }
+        .btn-submit:hover { background: var(--brand-dark); transform: translateY(-2px); }
+
+        /* ── FOOTER ── */
+        .footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+        .footer-logo { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 1rem; }
+        .footer-logo span { color: var(--brand); }
+        .footer-text { font-size: 0.82rem; color: var(--text-muted); }
+        .footer-links { display: flex; gap: 20px; list-style: none; }
+        .footer-links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+        .footer-links a:hover { color: var(--brand); }
+
+        /* ── REVEAL ── */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visivel { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ── BACK-TO-TOP ── */
+        .btn-top {
+            position: fixed; bottom: 28px; right: 28px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--brand); color: white; border: none; cursor: pointer;
+            font-size: 1.1rem; box-shadow: var(--shadow-lg);
+            opacity: 0; pointer-events: none; transition: all var(--transition);
+        }
+        .btn-top.visivel { opacity: 1; pointer-events: all; }
+        .btn-top:hover { transform: translateY(-4px); }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+            padding: 14px 24px; border-radius: 10px;
+            font-size: 0.9rem; font-weight: 600; z-index: 9999;
+            opacity: 0; pointer-events: none; transition: all var(--transition);
+        }
+        .toast.visivel { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all; }
+        .toast.sucesso { background: #22c55e; color: white; }
+        .toast.erro { background: #ef4444; color: white; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .hero-grid, .sobre-grid, .contacto-grid { grid-template-columns: 1fr; }
+            .hero-image-wrapper { order: -1; }
+            .hero-image-ring { width: 240px; height: 240px; }
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-links {
+                display: none; position: fixed; top: 68px; left: 0; right: 0;
+                background: var(--bg); flex-direction: column;
+                padding: 20px; border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+            .nav-links.ativo { display: flex; }
+            .menu-hamburger { display: flex; }
+        }
+        @media (max-width: 560px) {
+            .skills-grid { grid-template-columns: 1fr 1fr; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .hero-stats { gap: 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .sobre-info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" id="header">
+        <div class="header-inner container">
+            <a href="#" class="logo">&lt;Francisco<span>/</span>&gt;</a>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#hero" class="ativo">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#competencias">Skills</a></li>
+                    <li><a href="#portfolio">Portfólio</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <button class="dark-toggle" id="darkToggle" aria-label="Alternar tema">☀️</button>
+                <button class="menu-hamburger" id="menuBtn" aria-label="Abrir menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ── HERO ── -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="dot"></span>
+                            Disponível para projectos
+                        </div>
+                        <h1 class="hero-title">
+                            Olá, sou Francisco<br>
+                            <span class="accent">Engenheiro Full-Stack</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Transformo ideias em aplicações robustas, escaláveis e orientadas a resultados — com arquitectura limpa, boas práticas e experiência de uso intuitiva.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#portfolio" class="btn btn-primary">Ver Projectos →</a>
+                            <a href="#contacto" class="btn btn-outline">Fale Comigo</a>
+                        </div>
+                        <div class="hero-stats">
+                            <div>
+                                <div class="hero-stat-number">5+</div>
+                                <div class="hero-stat-label">Anos de experiência</div>
+                            </div>
+                            <div>
+                                <div class="hero-stat-number">10+</div>
+                                <div class="hero-stat-label">Sistemas entregues</div>
+                            </div>
+                            <div>
+                                <div class="hero-stat-number">PT/EN</div>
+                                <div class="hero-stat-label">Idiomas</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrapper">
+                        <div class="hero-image-ring">
+                            <div class="hero-image" style="font-size:8rem;">
+                                👨‍💻
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── SOBRE ── -->
+        <section class="section sobre" id="sobre">
+            <div class="container">
+                <div class="sobre-grid">
+                    <div class="sobre-image-card reveal">
+                        <!-- SUBSTITUA PELO SEU NOME DE IMAGEM: -->
+                    <img src="foto-francisco.jpg" alt="Francisco Domingos">
+                        
+                        <div class="sobre-experience-badge">
+                            <strong>5+ Anos</strong>
+                            <span>de experiência</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="sobre-label reveal">Sobre Mim</p>
+                        <h2 class="sobre-title reveal reveal-delay-1">Engenheiro de Software focado em soluções escaláveis e de impacto real</h2>
+                        <p class="sobre-text reveal reveal-delay-2">
+                            Sou Francisco Domingos, Engenheiro de Software com mais de cinco anos de experiência no desenvolvimento de sistemas robustos e orientados a resultados. Trabalho com uma abordagem modular e baseada em boas práticas, garantindo que cada componente tenha um propósito claro e contribua para a eficiência do sistema.
+                        </p>
+                        <p class="sobre-text reveal reveal-delay-2">
+                            Gosto de transformar ideias em aplicações funcionais, equilibrando desempenho, organização e uma experiência de uso intuitiva. Valorizo a clareza, a consistência e o impacto real das soluções que desenvolvo — compreender o problema a fundo antes de propor qualquer solução é parte essencial do meu processo. Para mim, desenvolver software é construir algo útil, sustentável e que faça sentido para quem o utiliza.
+                        </p>
+                        <div class="sobre-info-grid reveal reveal-delay-3">
+                            <div class="sobre-info-item">
+                                <div class="icon">📍</div>
+                                <div>
+                                    <div class="label">Localização</div>
+                                    <div class="value">Luanda, Angola</div>
+                                </div>
+                            </div>
+                            <div class="sobre-info-item">
+                                <div class="icon">🎓</div>
+                                <div>
+                                    <div class="label">Formação</div>
+                                    <div class="value">Análise e Desenvolvimento de Sistemas</div>
+                                </div>
+                            </div>
+                            <div class="sobre-info-item">
+                                <div class="icon">💼</div>
+                                <div>
+                                    <div class="label">Experiência</div>
+                                    <div class="value">5+ Anos</div>
+                                </div>
+                            </div>
+                            <div class="sobre-info-item">
+                                <div class="icon">🌍</div>
+                                <div>
+                                    <div class="label">Idiomas</div>
+                                    <div class="value">Português / Inglês</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── SKILLS ── -->
+        <section class="section competencias" id="competencias">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-label reveal">Competências</p>
+                    <h2 class="section-title reveal reveal-delay-1">Tecnologias que domino</h2>
+                    <p class="section-desc reveal reveal-delay-2">Stack completo — desde o backend robusto até à interface final com o utilizador</p>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-card reveal">
+                        <div class="skill-icon">🟥</div>
+                        <h3 class="skill-name">Laravel</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-1">
+                        <div class="skill-icon">🔷</div>
+                        <h3 class="skill-name">ASP.NET Core / C#</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-2">
+                        <div class="skill-icon">🗄️</div>
+                        <h3 class="skill-name">SQL Server / MySQL</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-3">
+                        <div class="skill-icon">⚡</div>
+                        <h3 class="skill-name">JavaScript</h3>
+                        <p class="skill-level">Intermédio–Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div>
+                    </div>
+                    <div class="skill-card reveal">
+                        <div class="skill-icon">⚛️</div>
+                        <h3 class="skill-name">React / Angular</h3>
+                        <p class="skill-level">Intermédio</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="72"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-1">
+                        <div class="skill-icon">🌐</div>
+                        <h3 class="skill-name">HTML5 / CSS3</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="92"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-2">
+                        <div class="skill-icon">🔗</div>
+                        <h3 class="skill-name">Entity Framework</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-3">
+                        <div class="skill-icon">📦</div>
+                        <h3 class="skill-name">Bootstrap / jQuery</h3>
+                        <p class="skill-level">Avançado</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+                    </div>
+                    <div class="skill-card reveal reveal-delay-4">
+                        <div class="skill-icon">🔧</div>
+                        <h3 class="skill-name">Git & GitHub</h3>
+                        <p class="skill-level">Intermédio</p>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="75"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── PORTFÓLIO ── -->
+        <section class="section portfolio" id="portfolio">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-label reveal">Portfólio</p>
+                    <h2 class="section-title reveal reveal-delay-1">Projectos recentes</h2>
+                    <p class="section-desc reveal reveal-delay-2">Sistemas e aplicações desenvolvidos com foco em qualidade, escalabilidade e impacto real</p>
+                </div>
+
+                <div class="filtros reveal">
+                    <button class="filtro-btn ativo" data-categoria="todos">Todos</button>
+                    <button class="filtro-btn" data-categoria="web">Web Sites</button>
+                    <button class="filtro-btn" data-categoria="app">Aplicações</button>
+                    <button class="filtro-btn" data-categoria="erp">Sistemas ERP</button>
+                </div>
+
+                <div class="portfolio-grid" id="portfolioGrid">
+
+                    <!-- Pode Entrar -->
+                    <div class="portfolio-card reveal" data-categoria="web">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #2563eb, #06b6d4);">🎟️</div>
+                            <div class="portfolio-overlay">
+                                <a href="https://podeentra.com" target="_blank" class="portfolio-overlay-btn" title="Ver projecto">🔗</a>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Web Site</p>
+                            <h3 class="portfolio-title">Pode Entrar</h3>
+                            <p class="portfolio-desc">Plataforma moderna de gestão de convites com QR Code. Permite confirmação de presenças em tempo real, painel de controlo para o organizador e convites digitais elegantes para eventos de qualquer dimensão.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">Laravel</span>
+                                <span class="portfolio-tag">JavaScript</span>
+                                <span class="portfolio-tag">CSS</span>
+                                <span class="portfolio-tag">HTML</span>
+                            </div>
+                            <a href="https://podeentra.com" target="_blank" class="portfolio-link">podeentra.com ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- IL Advogados -->
+                    <div class="portfolio-card reveal reveal-delay-1" data-categoria="web">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #1e3a5f, #2a6099);">⚖️</div>
+                            <div class="portfolio-overlay">
+                                <a href="https://iladvogados.com" target="_blank" class="portfolio-overlay-btn" title="Ver projecto">🔗</a>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Web Site</p>
+                            <h3 class="portfolio-title">IL Advogados</h3>
+                            <p class="portfolio-desc">Website institucional para escritório de advogados. Design profissional e sóbrio, estruturado para transmitir credibilidade, apresentar serviços jurídicos e facilitar o contacto com clientes.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">HTML5</span>
+                                <span class="portfolio-tag">CSS</span>
+                                <span class="portfolio-tag">JavaScript</span>
+                            </div>
+                            <a href="https://iladvogados.com" target="_blank" class="portfolio-link">iladvogados.com ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- Pode Entrar App -->
+                    <div class="portfolio-card reveal reveal-delay-2" data-categoria="app">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #0ea5e9, #6366f1);">📱</div>
+                            <div class="portfolio-overlay">
+                                <a href="https://podeentra.com/login" target="_blank" class="portfolio-overlay-btn" title="Ver aplicação">🔗</a>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Aplicação Web</p>
+                            <h3 class="portfolio-title">Pode Entrar — App</h3>
+                            <p class="portfolio-desc">Sistema de gestão de convites com QR Code para controlo de acesso em eventos. Inclui validação em tempo real, painel de controlo por evento e relatórios de presença.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">Laravel</span>
+                                <span class="portfolio-tag">MySQL</span>
+                                <span class="portfolio-tag">JavaScript</span>
+                            </div>
+                            <a href="https://podeentra.com/login" target="_blank" class="portfolio-link">Aceder à App ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- DocManager -->
+                    <div class="portfolio-card reveal" data-categoria="app">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #334155, #475569);">📄</div>
+                            <div class="portfolio-overlay">
+                                <button class="portfolio-overlay-btn" title="Projecto privado">🔒</button>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Sistema de Gestão</p>
+                            <h3 class="portfolio-title">DocManager</h3>
+                            <p class="portfolio-desc">Sistema de Gestão Documental para ambiente organizacional. Permite o arquivo, pesquisa, controlo de versões e fluxo de aprovação de documentos internos com níveis de acesso por perfil.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">ASP.NET MVC</span>
+                                <span class="portfolio-tag">C#</span>
+                                <span class="portfolio-tag">Entity Framework</span>
+                                <span class="portfolio-tag">SQL Server</span>
+                                <span class="portfolio-tag">Razor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Master Contas ERP -->
+                    <div class="portfolio-card reveal reveal-delay-1" data-categoria="erp">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #065f46, #059669);">📊</div>
+                            <div class="portfolio-overlay">
+                                <button class="portfolio-overlay-btn" title="Projecto privado">🔒</button>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Sistema ERP</p>
+                            <h3 class="portfolio-title">Master Contas ERP</h3>
+                            <p class="portfolio-desc">ERP completo orientado para consultoras, com 5 módulos integrados: Relatório de Contas, Gestão Financeira, Controlo de Clientes, Emissão de Documentos e Painel de Análise. Desenvolvido em C# com SQL Server.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">C#</span>
+                                <span class="portfolio-tag">SQL Server</span>
+                                <span class="portfolio-tag">.NET</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SVC -->
+                    <div class="portfolio-card reveal reveal-delay-2" data-categoria="app">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #7c3aed, #db2777);">🗳️</div>
+                            <div class="portfolio-overlay">
+                                <button class="portfolio-overlay-btn" title="Projecto privado">🔒</button>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Aplicação Web</p>
+                            <h3 class="portfolio-title">SVC — Sistema de Votação</h3>
+                            <p class="portfolio-desc">Plataforma web para controlo de votos em concursos de entretenimento. Permite a criação de concursos, registo de candidatos, votação em tempo real e apuramento automático de resultados.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">Laravel</span>
+                                <span class="portfolio-tag">MySQL</span>
+                                <span class="portfolio-tag">JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intranet -->
+                    <div class="portfolio-card reveal" data-categoria="erp">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">🏢</div>
+                            <div class="portfolio-overlay">
+                                <button class="portfolio-overlay-btn" title="Projecto privado">🔒</button>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Sistema Organizacional</p>
+                            <h3 class="portfolio-title">Intranet Corporativa</h3>
+                            <p class="portfolio-desc">Sistema de Gestão de Conteúdo para uso interno organizacional. Centraliza comunicações, documentos, notícias e recursos da empresa com controlo de acessos por departamento e perfil de utilizador.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">ASP.NET MVC</span>
+                                <span class="portfolio-tag">C#</span>
+                                <span class="portfolio-tag">Entity Framework</span>
+                                <span class="portfolio-tag">SQL Server</span>
+                                <span class="portfolio-tag">Razor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SGCT -->
+                    <div class="portfolio-card reveal reveal-delay-1" data-categoria="erp">
+                        <div class="portfolio-thumb">
+                            <div class="portfolio-thumb-bg" style="background: linear-gradient(135deg, #92400e, #d97706);">🎫</div>
+                            <div class="portfolio-overlay">
+                                <button class="portfolio-overlay-btn" title="Projecto privado">🔒</button>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <p class="portfolio-category">Sistema de Suporte</p>
+                            <h3 class="portfolio-title">SGCT — Gestão de Tickets</h3>
+                            <p class="portfolio-desc">Sistema institucional para registo, acompanhamento e resolução de tarefas e incidências. Permite abertura de tickets, atribuição a técnicos, definição de prioridades e histórico completo de cada ocorrência.</p>
+                            <div class="portfolio-tags">
+                                <span class="portfolio-tag">ASP.NET MVC</span>
+                                <span class="portfolio-tag">C#</span>
+                                <span class="portfolio-tag">Entity Framework</span>
+                                <span class="portfolio-tag">SQL Server</span>
+                                <span class="portfolio-tag">Razor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CONTACTO ── -->
+        <section class="section contacto" id="contacto">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-label reveal">Contacto</p>
+                    <h2 class="section-title reveal reveal-delay-1">Vamos trabalhar juntos?</h2>
+                    <p class="section-desc reveal reveal-delay-2">Tem um projecto em mente? Envie-me uma mensagem e responderei brevemente.</p>
+                </div>
+
+                <div class="contacto-grid">
+                    <div class="contacto-info-card reveal">
+                        <h3 class="contacto-info-title">Informações de contacto</h3>
+                        <p class="contacto-info-text">Estou disponível para projectos de desenvolvimento, consultoria e colaborações. Fale comigo — responderei com brevidade.</p>
+                        <div class="contacto-item">
+                            <div class="contacto-item-icon">📧</div>
+                            <div>
+                                <div class="contacto-item-label">Email</div>
+                                <div class="contacto-item-value">franciscodomingos924@gmail.com</div>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <div class="contacto-item-icon">📱</div>
+                            <div>
+                                <div class="contacto-item-label">Telefone</div>
+                                <div class="contacto-item-value">+244 924 430 567</div>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <div class="contacto-item-icon">📍</div>
+                            <div>
+                                <div class="contacto-item-label">Localização</div>
+                                <div class="contacto-item-value">Luanda, Angola</div>
+                            </div>
+                        </div>
+                        <div class="contacto-socials">
+                            <a href="#" class="social-link" aria-label="GitHub">🐙</a>
+                            <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
+                        </div>
+                    </div>
+
+                    <form class="contacto-form reveal reveal-delay-1" id="formContacto" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nome">Nome Completo *</label>
+                                <input type="text" id="nome" name="nome" placeholder="O seu nome" required>
+                                <p class="form-error-msg" id="erroNome"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" placeholder="o.seu@email.com" required>
+                                <p class="form-error-msg" id="erroEmail"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="assunto">Assunto</label>
+                            <select id="assunto" name="assunto">
+                                <option value="">Selecione um assunto</option>
+                                <option value="trabalho">Proposta de Trabalho</option>
+                                <option value="freelance">Projecto Freelance</option>
+                                <option value="consultoria">Consultoria</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensagem">Mensagem *</label>
+                            <textarea id="mensagem" name="mensagem" rows="5" placeholder="Descreva o seu projecto ou necessidade..." required></textarea>
+                            <p class="form-error-msg" id="erroMensagem"></p>
+                        </div>
+                        <button type="submit" class="btn-submit">Enviar Mensagem →</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-logo">&lt;Francisco<span>/</span>&gt;</div>
+                <p class="footer-text">&copy; 2026 Francisco Domingos. Todos os direitos reservados.</p>
+                <ul class="footer-links">
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#portfolio">Portfólio</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <button class="btn-top" id="btnTop" aria-label="Voltar ao topo">↑</button>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const header = document.getElementById('header');
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        const darkToggle = document.getElementById('darkToggle');
+        const btnTop = document.getElementById('btnTop');
+        const formContacto = document.getElementById('formContacto');
+        const toast = document.getElementById('toast');
+        const filtros = document.querySelectorAll('.filtro-btn');
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('ativo');
+            navLinks.classList.toggle('ativo');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('ativo');
+                navLinks.classList.remove('ativo');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 80);
+            btnTop.classList.toggle('visivel', window.scrollY > 600);
+            updateActiveNav();
+        });
+
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 200;
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                if (scrollPos >= top && scrollPos < top + height) {
+                    navLinks.querySelectorAll('a').forEach(a => {
+                        a.classList.toggle('ativo', a.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const destino = document.querySelector(link.getAttribute('href'));
+                if (destino) destino.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        filtros.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const categoria = btn.dataset.categoria;
+                filtros.forEach(f => f.classList.remove('ativo'));
+                btn.classList.add('ativo');
+                portfolioCards.forEach(card => {
+                    card.classList.toggle('hidden', !(categoria === 'todos' || card.dataset.categoria === categoria));
+                });
+            });
+        });
+
+        function mostrarErro(inputId, erroId, mensagem) {
+            document.getElementById(inputId).classList.add('erro');
+            const erro = document.getElementById(erroId);
+            erro.textContent = mensagem;
+            erro.classList.add('visivel');
+        }
+        function limparErro(inputId, erroId) {
+            document.getElementById(inputId).classList.remove('erro');
+            document.getElementById(erroId).classList.remove('visivel');
+        }
+        function mostrarToast(mensagem, tipo) {
+            toast.textContent = mensagem;
+            toast.className = `toast ${tipo} visivel`;
+            setTimeout(() => toast.classList.remove('visivel'), 4000);
+        }
+
+        formContacto.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mensagem = document.getElementById('mensagem').value.trim();
+            let valido = true;
+            limparErro('nome','erroNome'); limparErro('email','erroEmail'); limparErro('mensagem','erroMensagem');
+            if (nome.length < 3) { mostrarErro('nome','erroNome','O nome deve ter pelo menos 3 caracteres.'); valido = false; }
+            if (!email.includes('@') || !email.includes('.')) { mostrarErro('email','erroEmail','Por favor insira um email válido.'); valido = false; }
+            if (mensagem.length < 10) { mostrarErro('mensagem','erroMensagem','A mensagem deve ter pelo menos 10 caracteres.'); valido = false; }
+            if (valido) { mostrarToast('Mensagem enviada com sucesso! Obrigado pelo contacto.', 'sucesso'); formContacto.reset(); }
+            else { mostrarToast('Por favor corrija os erros no formulário.', 'erro'); }
+        });
+
+        ['nome','email','mensagem'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () =>
+                limparErro(id, `erro${id.charAt(0).toUpperCase() + id.slice(1)}`)
+            );
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visivel');
+                    const skillBar = entry.target.querySelector('.skill-bar-fill');
+                    if (skillBar) skillBar.style.width = skillBar.dataset.width + '%';
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        let darkMode = false;
+        darkToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark', darkMode);
+            darkToggle.textContent = darkMode ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+</html>
